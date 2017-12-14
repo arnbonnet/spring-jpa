@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,10 @@ public class BookDAO {
 
 	@PersistenceContext
 	protected EntityManager em;
+	
+	protected Session getSession() {
+		return em.unwrap(Session.class);
+		}
 
 	public BookDAO() {
 	}
@@ -30,7 +35,7 @@ public class BookDAO {
 	}
 
 	public void delete(Book book) {
-		em.remove(book);
+		em.remove(getById(book.getId()));
 	}
 
 	public List<Book> getAll() {
